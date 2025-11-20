@@ -36,18 +36,23 @@ const ApplicationDetail = () => {
         updateApplication(app.id, { status: e.target.value });
     };
 
-    const handleAddChat = (e) => {
+    const handleAddChat = async (e) => {
         e.preventDefault();
-        addCoffeeChat(app.id, {
-            name: chatName,
-            date: chatDate,
-            notes: chatNotes,
-            rating: Number(chatRating)
-        });
-        setIsChatFormOpen(false);
-        setChatName('');
-        setChatNotes('');
-        setChatRating(5);
+        try {
+            await addCoffeeChat(app.id, {
+                name: chatName,
+                date: chatDate,
+                notes: chatNotes,
+                rating: Number(chatRating)
+            });
+            setIsChatFormOpen(false);
+            setChatName('');
+            setChatNotes('');
+            setChatRating(5);
+        } catch (error) {
+            console.error('Failed to add coffee chat:', error);
+            alert('Failed to add coffee chat. Please check the console for details.');
+        }
     };
 
     return (
@@ -117,27 +122,25 @@ const ApplicationDetail = () => {
                             <h3 style={{ fontSize: '1.1rem', fontWeight: '600' }}>Coffee Chats</h3>
                             <button
                                 className="btn btn-secondary"
-                                onClick={() => setShowChatForm(!showChatForm)}
+                                onClick={() => setIsChatFormOpen(!isChatFormOpen)}
                             >
-                                {showChatForm ? 'Cancel' : 'Add Chat'}
+                                {isChatFormOpen ? 'Cancel' : 'Add Chat'}
                             </button>
                         </div>
 
-                        {showChatForm && (
-                            <form onSubmit={handleChatSubmit} style={{ marginBottom: 'var(--spacing-lg)', padding: 'var(--spacing-md)', backgroundColor: 'var(--surface-hover)', borderRadius: 'var(--radius-md)' }}>
-                                {/* Form fields remain the same */}
+                        {isChatFormOpen && (
+                            <form onSubmit={handleAddChat} style={{ marginBottom: 'var(--spacing-lg)', padding: 'var(--spacing-md)', backgroundColor: 'var(--surface-hover)', borderRadius: 'var(--radius-md)' }}>
                                 <div style={{ display: 'grid', gap: 'var(--spacing-md)' }}>
                                     <div>
                                         <label className="label">Employee Name</label>
                                         <input
                                             required
                                             className="input"
-                                            value={newChat.name}
-                                            onChange={e => setNewChat({ ...newChat, name: e.target.value })}
+                                            value={chatName}
+                                            onChange={e => setChatName(e.target.value)}
                                             placeholder="e.g. John Doe"
                                         />
                                     </div>
-                                    {/* ... other fields ... */}
                                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-md)' }}>
                                         <div>
                                             <label className="label">Date</label>
@@ -145,8 +148,8 @@ const ApplicationDetail = () => {
                                                 required
                                                 type="date"
                                                 className="input"
-                                                value={newChat.date}
-                                                onChange={e => setNewChat({ ...newChat, date: e.target.value })}
+                                                value={chatDate}
+                                                onChange={e => setChatDate(e.target.value)}
                                             />
                                         </div>
                                         <div>
@@ -157,8 +160,8 @@ const ApplicationDetail = () => {
                                                 min="1"
                                                 max="5"
                                                 className="input"
-                                                value={newChat.rating}
-                                                onChange={e => setNewChat({ ...newChat, rating: e.target.value })}
+                                                value={chatRating}
+                                                onChange={e => setChatRating(e.target.value)}
                                             />
                                         </div>
                                     </div>
@@ -167,12 +170,12 @@ const ApplicationDetail = () => {
                                         <textarea
                                             className="input"
                                             rows="3"
-                                            value={newChat.notes}
-                                            onChange={e => setNewChat({ ...newChat, notes: e.target.value })}
+                                            value={chatNotes}
+                                            onChange={e => setChatNotes(e.target.value)}
                                             placeholder="Key takeaways..."
                                         />
                                     </div>
-                                    <button type="submit" className="btn btn-primary">Save Chat</button>
+                                    <button type="submit" className="btn btn-primary">Add Coffee Chat</button>
                                 </div>
                             </form>
                         )}
