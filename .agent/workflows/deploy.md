@@ -46,3 +46,15 @@ If you bought a domain on **Wix** (like `www.my-app.com`), you can use it with V
 6.  Add the records Vercel gave you.
 
 **Note**: You cannot "upload" this app into the Wix Website Builder. It must be hosted on Vercel, but it can *use* your Wix domain.
+
+## Troubleshooting: Forgot Environment Variables?
+If you deployed but forgot the keys (or the app shows a blank screen), don't worry!
+
+1.  Go to your **Vercel Project Dashboard**.
+2.  Click **Settings** -> **Environment Variables**.
+3.  Add your keys (`VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`).
+4.  Go to the **Deployments** tab.
+5.  Click the **three dots** (⋮) next to your latest deployment.
+6.  Select **Redeploy**.
+7.  Click **Redeploy** again to confirm.
+
